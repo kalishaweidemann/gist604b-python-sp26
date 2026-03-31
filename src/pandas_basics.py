@@ -101,8 +101,6 @@ def load_and_explore_gis_data(file_path):
     
     return df
 
-    pass  # Remove this line when you implement the function
-
 
 # =============================================================================
 # FUNCTION 2: FILTER ENVIRONMENTAL DATA
@@ -209,8 +207,6 @@ def filter_environmental_data(df, min_temp=15, max_temp=30, quality="good"):
     print(f"\n✅ Filtering complete! Ready for analysis.")
     
     return filtered_df
-    
-    pass  # Remove this line when you implement the function
 
 
 # =============================================================================
