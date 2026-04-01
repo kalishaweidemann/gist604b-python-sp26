@@ -218,16 +218,70 @@ def geometry_operations(
         >>> result = geometry_operations(gdf, 'centroid')
         >>> centroids = result['result']
     """
-    # TODO: Implement this function
-    # Hints:
-    # - Support multiple operations with if/elif statements
-    # - For buffer: use gdf.geometry.buffer(distance)
-    # - For centroid: use gdf.geometry.centroid
-    # - For area: use gdf.geometry.area
-    # - For length: use gdf.geometry.length
-    # - For simplify: use gdf.geometry.simplify(tolerance)
-    # - Return results in standardized dictionary format
-    raise NotImplementedError("geometry_operations not yet implemented")
+    valid_operations = ['buffer', 'centroid', 'area', 'length', 'simplify']
+    
+    if operation not in valid_operations:
+        raise ValueError(f"Invalid operation '{operation}'. Must be one of: {valid_operations}")
+    
+    result_dict = {
+        'operation': operation,
+        'statistics': {}
+    }
+    
+    if operation == 'buffer':
+        if 'distance' not in kwargs:
+            raise ValueError("Buffer operation requires 'distance' parameter")
+        
+        distance = kwargs['distance']
+        result_gdf = gdf.copy()
+        result_gdf.geometry = gdf.geometry.buffer(distance)
+        
+        result_dict['result'] = result_gdf
+        result_dict['statistics']['buffer_distance'] = distance
+        result_dict['statistics']['feature_count'] = len(result_gdf)
+        
+    elif operation == 'centroid':
+        result_gdf = gdf.copy()
+        result_gdf.geometry = gdf.geometry.centroid
+        
+        result_dict['result'] = result_gdf
+        result_dict['statistics']['feature_count'] = len(result_gdf)
+        
+    elif operation == 'area':
+        result_gdf = gdf.copy()
+        areas = gdf.geometry.area
+        result_gdf['area'] = areas
+        
+        result_dict['result'] = result_gdf
+        result_dict['statistics']['total_area'] = areas.sum()
+        result_dict['statistics']['mean_area'] = areas.mean()
+        result_dict['statistics']['min_area'] = areas.min()
+        result_dict['statistics']['max_area'] = areas.max()
+        
+    elif operation == 'length':
+        result_gdf = gdf.copy()
+        lengths = gdf.geometry.length
+        result_gdf['length'] = lengths
+        
+        result_dict['result'] = result_gdf
+        result_dict['statistics']['total_length'] = lengths.sum()
+        result_dict['statistics']['mean_length'] = lengths.mean()
+        result_dict['statistics']['min_length'] = lengths.min()
+        result_dict['statistics']['max_length'] = lengths.max()
+        
+    elif operation == 'simplify':
+        if 'tolerance' not in kwargs:
+            raise ValueError("Simplify operation requires 'tolerance' parameter")
+        
+        tolerance = kwargs['tolerance']
+        result_gdf = gdf.copy()
+        result_gdf.geometry = gdf.geometry.simplify(tolerance)
+        
+        result_dict['result'] = result_gdf
+        result_dict['statistics']['tolerance'] = tolerance
+        result_dict['statistics']['feature_count'] = len(result_gdf)
+    
+    return result_dict
 
 
 # Function 5: Spatial Relationships
