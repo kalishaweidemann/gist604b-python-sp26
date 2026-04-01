@@ -678,3 +678,4 @@ def _calculate_geometry_statistics(gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
         stats['mean_length'] = gdf.geometry.length.mean()
     
     return stats
+
